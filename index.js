@@ -43,6 +43,8 @@ if (!fs.existsSync(LoveDir)) {
     fs.mkdirSync(LoveDir);
 }
 
+const http = require("http");
+
 const api = process.env.API
 
 const activeBots = {};
@@ -530,6 +532,28 @@ startBot(config.mainToken, true);
 const db = getDB();
 db.tokens.forEach(item => startBot(item.token));
 log('info', 'SYSTEM', `Premium System Online.`);
+
+
+http.createServer((req, res) => {
+    res.writeHead(200, {
+        "Content-Type": "application/json"
+    });
+
+    res.end(JSON.stringify({
+        status: "online",
+        uptime: SABIR7718(),
+        developer: "SABIR7718",
+        time: new Date().toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata"
+        })
+    }, null, 2));
+}).listen(process.env.PORT || 3000, () => {
+    log(
+        'success',
+        'SERVER',
+        `HTTP Server Running On Port ${process.env.PORT || 3000}`
+    );
+});
 
 if (process.env.URL) {
 
